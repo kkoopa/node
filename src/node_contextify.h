@@ -19,33 +19,18 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-var binding = process.binding('contextify');
-var util = require('util');
+#ifndef node_contextify_h
+#define node_contextify_h
 
-exports.createScript = function(code, filename) {
-  return new binding.ContextifyScript(code, filename);
-};
+#include "node.h"
+#include "node_object_wrap.h"
+#include "v8.h"
+#include "uv.h"
 
-exports.createContext = function(initSandbox) {
-  if (util.isUndefined(initSandbox)) {
-    initSandbox = {};
-  }
+namespace node {
 
-  return new binding.ContextifyContext(initSandbox);
-};
+void InitContextify(v8::Handle<v8::Object> target);
 
-exports.runInContext = function(code, context, filename) {
-  var script = exports.createScript(code, filename);
-  return script.runInContext(context);
-};
+} // namespace node
 
-exports.runInNewContext = function(code, sandbox, filename) {
-  var script = exports.createScript(code, filename);
-  var context = exports.createContext(sandbox);
-  return script.runInContext(context);
-};
-
-exports.runInThisContext = function(code, filename) {
-  var script = exports.createScript(code, filename);
-  return script.runInThisContext();
-};
+#endif //  node_contextify_h
