@@ -324,6 +324,9 @@ class ContextifyScript : ObjectWrap {
         FIXED_ONE_BYTE_STRING(node_isolate, "_contextifyHidden");
     Local<Object> hidden_context =
         sandbox->GetHiddenValue(hidden_name).As<Object>();
+    if (hidden_context.IsEmpty()) {
+      return ThrowTypeError("empty hidden context");
+    }
     ContextifyContext* ctx =
         ObjectWrap::Unwrap<ContextifyContext>(hidden_context);
     Persistent<Context> context;

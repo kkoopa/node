@@ -91,9 +91,9 @@ var qsWeirdObjects = [
 ];
 // }}}
 
-var Script = require('vm').Script;
-var foreignObject = Script.runInContext('({"foo": ["bar", "baz"]})',
-                                        Script.createContext());
+var vm = require('vm');
+var foreignObject = vm.runInContext('({"foo": ["bar", "baz"]})',
+                                        vm.createContext());
 
 var qsNoMungeTestCases = [
   ['', {}],

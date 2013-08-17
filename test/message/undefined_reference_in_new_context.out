@@ -1,10 +1,11 @@
 before
 
-*test*message*undefined_reference_in_new_context.js:32
-vm.runInNewContext('foo.bar = 5;');
-   ^
+vm.js:48
+  return script.runInContext(sandbox, timeout);
+                ^
 ReferenceError: foo is not defined
     at evalmachine.<anonymous>:*
+    at Object.exports.runInNewContext (vm.js:*)
     at Object.<anonymous> (*test*message*undefined_reference_in_new_context.js:*)
     at Module._compile (module.js:*)
     at *..js (module.js:*)

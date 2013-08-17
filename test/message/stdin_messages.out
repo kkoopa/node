@@ -1,9 +1,11 @@
 [stdin]
 
-[stdin]:1
-with(this){__filename}
-^^^^
+vm.js:26
+  return new binding.ContextifyScript(code, filename);
+         ^
 SyntaxError: Strict mode code may not include a with statement
+    at Object.exports.createScript (vm.js:*:*)
+    at Object.exports.runInThisContext (vm.js:*:*)
     at Object.<anonymous> ([stdin]-wrapper:*:*)
     at Module._compile (module.js:*:*)
     at evalScript (node.js:*:*)
@@ -14,11 +16,12 @@ SyntaxError: Strict mode code may not include a with statement
 42
 42
 
-[stdin]:1
-throw new Error("hello")
-      ^
+vm.js:53
+  return script.runInThisContext(timeout);
+                ^
 Error: hello
-    at [stdin]:1:*
+    at [stdin]:1:7
+    at Object.exports.runInThisContext (vm.js:*:*)
     at Object.<anonymous> ([stdin]-wrapper:*:*)
     at Module._compile (module.js:*:*)
     at evalScript (node.js:*:*)
@@ -27,11 +30,12 @@ Error: hello
     at _stream_readable.js:*:*
     at process._tickCallback (node.js:*:*)
 
-[stdin]:1
-throw new Error("hello")
-      ^
+vm.js:53
+  return script.runInThisContext(timeout);
+                ^
 Error: hello
-    at [stdin]:1:*
+    at [stdin]:1:7
+    at Object.exports.runInThisContext (vm.js:*:*)
     at Object.<anonymous> ([stdin]-wrapper:*:*)
     at Module._compile (module.js:*:*)
     at evalScript (node.js:*:*)
@@ -41,11 +45,12 @@ Error: hello
     at process._tickCallback (node.js:*:*)
 100
 
-[stdin]:1
-var x = 100; y = x;
-               ^
+vm.js:53
+  return script.runInThisContext(timeout);
+                ^
 ReferenceError: y is not defined
     at [stdin]:1:16
+    at Object.exports.runInThisContext (vm.js:*:*)
     at Object.<anonymous> ([stdin]-wrapper:*:*)
     at Module._compile (module.js:*:*)
     at evalScript (node.js:*:*)
@@ -54,13 +59,14 @@ ReferenceError: y is not defined
     at _stream_readable.js:*:*
     at process._tickCallback (node.js:*:*)
 
-[stdin]:1
-var ______________________________________________; throw 10
-                                                    ^
+vm.js:53
+  return script.runInThisContext(timeout);
+                ^
 10
 
-[stdin]:1
-var ______________________________________________; throw 10
-                                                    ^
+vm.js:53
+  return script.runInThisContext(timeout);
+                ^
 10
 done
+

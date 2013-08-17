@@ -1,9 +1,11 @@
 [eval]
 
-[eval]:1
-with(this){__filename}
-^^^^
+vm.js:26
+  return new binding.ContextifyScript(code, filename);
+         ^
 SyntaxError: Strict mode code may not include a with statement
+    at Object.exports.createScript (vm.js:*:*)
+    at Object.exports.runInThisContext (vm.js:*:*)
     at Object.<anonymous> ([eval]-wrapper:*:*)
     at Module._compile (module.js:*:*)
     at evalScript (node.js:*:*)
@@ -12,22 +14,24 @@ SyntaxError: Strict mode code may not include a with statement
 42
 42
 
-[eval]:1
-throw new Error("hello")
-      ^
+vm.js:53
+  return script.runInThisContext(timeout);
+                ^
 Error: hello
     at [eval]:1:7
+    at Object.exports.runInThisContext (vm.js:*:*)
     at Object.<anonymous> ([eval]-wrapper:*:*)
     at Module._compile (module.js:*:*)
     at evalScript (node.js:*:*)
     at startup (node.js:*:*)
     at node.js:*:*
 
-[eval]:1
-throw new Error("hello")
-      ^
+vm.js:53
+  return script.runInThisContext(timeout);
+                ^
 Error: hello
     at [eval]:1:7
+    at Object.exports.runInThisContext (vm.js:*:*)
     at Object.<anonymous> ([eval]-wrapper:*:*)
     at Module._compile (module.js:*:*)
     at evalScript (node.js:*:*)
@@ -35,24 +39,26 @@ Error: hello
     at node.js:*:*
 100
 
-[eval]:1
-var x = 100; y = x;
-               ^
+vm.js:53
+  return script.runInThisContext(timeout);
+                ^
 ReferenceError: y is not defined
     at [eval]:1:16
+    at Object.exports.runInThisContext (vm.js:*:*)
     at Object.<anonymous> ([eval]-wrapper:*:*)
     at Module._compile (module.js:*:*)
     at evalScript (node.js:*:*)
     at startup (node.js:*:*)
     at node.js:*:*
 
-[eval]:1
-var ______________________________________________; throw 10
-                                                    ^
+vm.js:53
+  return script.runInThisContext(timeout);
+                ^
 10
 
-[eval]:1
-var ______________________________________________; throw 10
-                                                    ^
+vm.js:53
+  return script.runInThisContext(timeout);
+                ^
 10
 done
+
