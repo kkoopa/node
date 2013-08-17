@@ -81,6 +81,7 @@ using v8::Object;
 using v8::Persistent;
 using v8::String;
 using v8::ThrowException;
+using v8::V8;
 using v8::Value;
 
 
@@ -254,6 +255,18 @@ void SecureContext::Init(const FunctionCallbackInfo<Value>& args) {
       method = TLSv1_server_method();
     } else if (strcmp(*sslmethod, "TLSv1_client_method") == 0) {
       method = TLSv1_client_method();
+    } else if (strcmp(*sslmethod, "TLSv1_1_method") == 0) {
+      method = TLSv1_1_method();
+    } else if (strcmp(*sslmethod, "TLSv1_1_server_method") == 0) {
+      method = TLSv1_1_server_method();
+    } else if (strcmp(*sslmethod, "TLSv1_1_client_method") == 0) {
+      method = TLSv1_1_client_method();
+    } else if (strcmp(*sslmethod, "TLSv1_2_method") == 0) {
+      method = TLSv1_2_method();
+    } else if (strcmp(*sslmethod, "TLSv1_2_server_method") == 0) {
+      method = TLSv1_2_server_method();
+    } else if (strcmp(*sslmethod, "TLSv1_2_client_method") == 0) {
+      method = TLSv1_2_client_method();
     } else {
       return ThrowError("Unknown method");
     }
@@ -3409,7 +3422,7 @@ void RandomBytesCheck(RandomBytesRequest* req, Local<Value> argv[2]) {
   if (req->error_) {
     char errmsg[256] = "Operation not supported";
 
-    if (req->error_ != (unsigned long) -1)
+    if (req->error_ != static_cast<unsigned long>(-1))
       ERR_error_string_n(req->error_, errmsg, sizeof errmsg);
 
     argv[0] = Exception::Error(OneByteString(node_isolate, errmsg));
@@ -3417,7 +3430,9 @@ void RandomBytesCheck(RandomBytesRequest* req, Local<Value> argv[2]) {
   } else {
     argv[0] = Null(node_isolate);
     argv[1] = Buffer::Use(req->data_, req->size_);
+    req->data_ = NULL;
   }
+  free(req->data_);
 }
 
 
@@ -3451,8 +3466,14 @@ void RandomBytes(const FunctionCallbackInfo<Value>& args) {
 
   RandomBytesRequest* req = new RandomBytesRequest();
   req->error_ = 0;
-  req->data_ = new char[size];
   req->size_ = size;
+  req->data_ = static_cast<char*>(malloc(size));
+
+  if (req->data_ == NULL) {
+    delete req;
+    V8::LowMemoryNotification();
+    return ThrowError("Out of memory");
+  }
 
   if (args[1]->IsFunction()) {
     Local<Object> obj = Object::New();

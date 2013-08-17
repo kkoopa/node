@@ -22,20 +22,32 @@
 var common = require('../common');
 var assert = require('assert');
 
-var timeouts = 0;
-var Timer = process.binding('timer_wrap').Timer;
-var kOnTimeout = Timer.kOnTimeout;
+var http = require('http');
 
-var t = new Timer();
-
-t.start(1000, 0);
-
-t[kOnTimeout] = function() {
-  timeouts++;
-  console.log('timeout');
-  t.close();
-};
+var expect = 'hex\nutf8\n';
+var data = '';
+var ended = false;
 
 process.on('exit', function() {
-  assert.equal(1, timeouts);
+  assert(ended);
+  assert.equal(data, expect);
+  console.log('ok');
+});
+
+http.createServer(function(q, s) {
+  s.setHeader('content-length', expect.length);
+  s.write('6865780a', 'hex');
+  s.write('utf8\n');
+  s.end();
+  this.close();
+}).listen(common.PORT, function() {
+  http.request({ port: common.PORT }).on('response', function(res) {
+    res.setEncoding('ascii');
+    res.on('data', function(c) {
+      data += c;
+    });
+    res.on('end', function() {
+      ended = true;
+    });
+  }).end();
 });
